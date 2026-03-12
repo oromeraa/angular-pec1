@@ -43,6 +43,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    // El routing hay que incluirlo manualmente. Sino no fuciona el botón de ADD (Categories)
+    path: 'user/category',
+    component: CategoryFormComponent,
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'user/category/:id',
     component: CategoryFormComponent,
     canActivate: [AuthGuard],
