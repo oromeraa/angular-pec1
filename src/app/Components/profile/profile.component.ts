@@ -4,16 +4,25 @@ import { LocalStorageService } from 'src/app/Services/local-storage.service';
 import { SharedService } from 'src/app/Services/shared.service';
 import { UserService } from 'src/app/Services/user.service';
 
+import { formatDate } from '@angular/common';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UserDTO } from 'src/app/Models/user.dto';
+
+type ProfileFormModel = {
+  name: FormControl<string>;
+  surname_1: FormControl<string>;
+  surname_2: FormControl<string>;
+  alias: FormControl<string>;
+  birth_date: FormControl<string>;
+  email: FormControl<string>;
+  password: FormControl<string>;
+};
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  /*
-  // TODO: implementar tipo ProfileFormModel
-  
-  // TODO 4
   profileUser: UserDTO;
 
   name: FormControl<string>;
@@ -26,7 +35,6 @@ export class ProfileComponent implements OnInit {
 
   profileForm: FormGroup<ProfileFormModel>;
   isValidForm: boolean | null;
-  */
 
   constructor(
     private formBuilder: FormBuilder,
@@ -34,11 +42,76 @@ export class ProfileComponent implements OnInit {
     private sharedService: SharedService,
     private localStorageService: LocalStorageService,
   ) {
-    // TODO 5
+    this.profileUser = new UserDTO('', '', '', '', new Date(), '', '');
+
+    this.isValidForm = null;
+
+    this.name = this.formBuilder.control('', {
+      validators: [
+        Validators.required,
+        Validators.minLength(4),
+        Validators.maxLength(25),
+      ],
+      nonNullable: true,
+    });
+
+    this.surname_1 = new FormControl('', {
+      validators: [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(25),
+      ],
+      nonNullable: true,
+    });
+
+    this.surname_2 = new FormControl('', {
+      validators: [Validators.minLength(5), Validators.maxLength(25)],
+      nonNullable: true,
+    });
+
+    this.alias = new FormControl('', {
+      validators: [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(25),
+      ],
+      nonNullable: true,
+    });
+
+    this.birth_date = new FormControl(
+      formatDate(new Date(), 'yyyy-MM-dd', 'en'),
+      {
+        validators: [Validators.required],
+        nonNullable: true,
+      },
+    );
+
+    this.email = new FormControl('', {
+      validators: [Validators.required, Validators.email],
+      nonNullable: true,
+    });
+
+    this.password = new FormControl('', {
+      validators: [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(16),
+      ],
+      nonNullable: true,
+    });
+
+    this.profileForm = this.formBuilder.group({
+      name: this.name,
+      surname_1: this.surname_1,
+      surname_2: this.surname_2,
+      alias: this.alias,
+      birth_date: this.birth_date,
+      email: this.email,
+      password: this.password,
+    });
   }
 
   async ngOnInit(): Promise<void> {
-    /*
     let errorResponse: any;
 
     const userId = this.localStorageService.get('user_id');
@@ -60,11 +133,9 @@ export class ProfileComponent implements OnInit {
       errorResponse = error.error;
       this.sharedService.errorLog(errorResponse);
     }
-      */
   }
 
   async updateUser(): Promise<void> {
-    /*
     let responseOK = false;
     this.isValidForm = false;
     let errorResponse: any;
@@ -105,6 +176,5 @@ export class ProfileComponent implements OnInit {
       responseOK,
       errorResponse,
     );
-    */
   }
 }
