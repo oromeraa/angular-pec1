@@ -3,6 +3,39 @@
 </div>
 <div>
   <h1>Login</h1>
+  <form [formGroup]="loginForm" (ngSubmit)="login()">
+    <div>
+      <!-- Email -->
+      <label>Email:</label>
+      <input type="email" [formControl]="email" />
+      <div *ngIf="email.errors">
+        <div *ngIf="email.errors" [ngClass]="'error'">
+          <div *ngIf="email.errors.required">Email is required</div>
+          <div *ngIf="email.errors.email">Email is invalid</div>
+        </div>
+      </div>
+    </div>
+    <!-- end Email -->
 
-  <!-- TODO 21 -->
+    <div>
+      <!-- Password -->
+      <label>Password:</label>
+      <input type="password" [formControl]="password" />
+      <div *ngIf="password.errors">
+        <div *ngIf="password.errors" [ngClass]="'error'">
+          <div *ngIf="password.errors.required">Password is required</div>
+          <div *ngIf="password.errors.minlength">
+            Password must be at least 8 characters long.
+          </div>
+          <div *ngIf="password.errors.maxlength">
+            Password can be max 16 characters long.
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end Password -->
+
+    <button type="submit">Login</button>
+  </form>
+  <!-- end Form Group-->
 </div>

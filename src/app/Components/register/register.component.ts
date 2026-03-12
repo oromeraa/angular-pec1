@@ -5,14 +5,10 @@ import { HeaderMenusService } from 'src/app/Services/header-menus.service';
 import { SharedService } from 'src/app/Services/shared.service';
 import { UserService } from 'src/app/Services/user.service';
 
-import {
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { UserDTO } from 'src/app/Models/user.dto';
 import { formatDate } from '@angular/common';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HeaderMenus } from 'src/app/Models/header-menus.dto';
+import { UserDTO } from 'src/app/Models/user.dto';
 
 type RegisterFormModel = {
   name: FormControl<string>;
@@ -30,7 +26,7 @@ type RegisterFormModel = {
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
-  // TODO: implementar tipo RegisterFormModel 
+  // TODO: implementar tipo RegisterFormModel
 
   // TODO 16
   registerUser: UserDTO;
@@ -46,7 +42,6 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup<RegisterFormModel>;
   isValidForm: boolean | null;
 
-
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
@@ -58,14 +53,21 @@ export class RegisterComponent implements OnInit {
     this.registerUser = new UserDTO('', '', '', '', new Date(), '', '');
     this.isValidForm = null;
 
-
     this.name = this.formBuilder.control('', {
-      validators: [Validators.required, Validators.minLength(4), Validators.maxLength(25)],
+      validators: [
+        Validators.required,
+        Validators.minLength(4),
+        Validators.maxLength(25),
+      ],
       nonNullable: true,
     });
 
     this.surname_1 = new FormControl('', {
-      validators: [Validators.required, Validators.minLength(5), Validators.maxLength(25)],
+      validators: [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(25),
+      ],
       nonNullable: true,
     });
 
@@ -75,14 +77,21 @@ export class RegisterComponent implements OnInit {
     });
 
     this.alias = new FormControl('', {
-      validators: [Validators.required, Validators.minLength(5), Validators.maxLength(25)],
+      validators: [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(25),
+      ],
       nonNullable: true,
     });
 
-    this.birth_date = new FormControl(formatDate(new Date(), 'yyyy-MM-dd', 'en'), {
-      validators: [Validators.required],
-      nonNullable: true,
-    });
+    this.birth_date = new FormControl(
+      formatDate(new Date(), 'yyyy-MM-dd', 'en'),
+      {
+        validators: [Validators.required],
+        nonNullable: true,
+      },
+    );
 
     this.email = new FormControl('', {
       validators: [Validators.required, Validators.email],
@@ -90,7 +99,11 @@ export class RegisterComponent implements OnInit {
     });
 
     this.password = new FormControl('', {
-      validators: [Validators.required, Validators.minLength(8), Validators.maxLength(16)],
+      validators: [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(16),
+      ],
       nonNullable: true,
     });
 
@@ -103,10 +116,9 @@ export class RegisterComponent implements OnInit {
       email: this.email,
       password: this.password,
     });
-
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   async register(): Promise<void> {
     let responseOK = false;

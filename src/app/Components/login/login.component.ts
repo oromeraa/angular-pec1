@@ -6,19 +6,25 @@ import { HeaderMenusService } from 'src/app/Services/header-menus.service';
 import { LocalStorageService } from 'src/app/Services/local-storage.service';
 import { SharedService } from 'src/app/Services/shared.service';
 
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthDTO } from 'src/app/Models/auth.dto';
+import { HeaderMenus } from 'src/app/Models/header-menus.dto';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  /*
-  // TODO 19
   loginUser: AuthDTO;
+
   email: FormControl<string>;
   password: FormControl<string>;
-  loginForm: FormGroup<{ email: FormControl<string>; password: FormControl<string> }>;
-  */
+
+  loginForm: FormGroup<{
+    email: FormControl<string>;
+    password: FormControl<string>;
+  }>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -28,12 +34,30 @@ export class LoginComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private router: Router,
   ) {
-    // TODO 20
+    this.loginUser = new AuthDTO('', '', '', '');
+
+    this.email = this.formBuilder.control('', {
+      validators: [Validators.required, Validators.email],
+      nonNullable: true,
+    });
+
+    this.password = this.formBuilder.control('', {
+      validators: [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(16),
+      ],
+      nonNullable: true,
+    });
+
+    this.loginForm = this.formBuilder.group({
+      email: this.email,
+      password: this.password,
+    });
   }
 
   ngOnInit(): void {}
 
-  /*
   async login(): Promise<void> {
     if (this.loginForm.invalid) {
       return;
@@ -86,5 +110,4 @@ export class LoginComponent implements OnInit {
       this.router.navigateByUrl('home');
     }
   }
-    */
 }
