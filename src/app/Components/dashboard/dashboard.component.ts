@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { PostDTO } from 'src/app/Models/post.dto';
 import { PostService } from 'src/app/Services/post.service';
+import { SharedService } from 'src/app/Services/shared.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,11 +10,13 @@ import { PostService } from 'src/app/Services/post.service';
 })
 export class DashboardComponent {
   posts!: PostDTO[];
-  sharedService: any;
   totalLikes: number;
   totalDislikes: number;
 
-  constructor(private postService: PostService) {
+  constructor(
+    private postService: PostService,
+    private sharedService: SharedService,
+  ) {
     this.totalLikes = 0;
     this.totalDislikes = 0;
     this.loadDashboard();
