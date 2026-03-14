@@ -2,6 +2,7 @@
   <p id="postFeedback"></p>
 </div>
 <div>
+  <h1>Post form</h1>
   <form *ngIf="postForm" [formGroup]="postForm" (ngSubmit)="savePost()">
     <div>
       <label for="title">Title:</label>
@@ -40,19 +41,39 @@
     </div>
 
     <div>
-      <label for="description">Css color:</label>
-      <input type="text" [formControl]="css_color" />
+      <label for="publication_date">Publication date:</label>
+      <input type="date" [formControl]="publication_date" />
 
-      <div *ngIf="css_color.errors">
+      <div *ngIf="publication_date.errors">
         <div
-          *ngIf="css_color.errors && isValidForm != null && !isValidForm"
+          *ngIf="publication_date.errors && isValidForm != null && !isValidForm"
           [ngClass]="'error'"
         >
-          <div *ngIf="css_color.errors.required">Css color is required</div>
-
-          <div *ngIf="css_color.errors.maxlength">
-            Css color can be max 7 characters long.
+          <div *ngIf="publication_date.errors.required">
+            Publication date is required
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label for="categories">Categories:</label>
+      <select
+        [formControl]="categories"
+        multiple
+        [compareWith]="compareCategoriesSelection"
+      >
+        <option *ngFor="let category of categoriesList" [ngValue]="category">
+          {{ category.title }}
+        </option>
+      </select>
+
+      <div *ngIf="categories.errors">
+        <div
+          *ngIf="categories.errors && isValidForm != null && !isValidForm"
+          [ngClass]="'error'"
+        >
+          <div *ngIf="categories.errors.required">Categories are required</div>
         </div>
       </div>
     </div>

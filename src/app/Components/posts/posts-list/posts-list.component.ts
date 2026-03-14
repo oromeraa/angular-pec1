@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalStorageService } from 'src/app/Services/local-storage.service';
 import { PostService } from 'src/app/Services/post.service';
@@ -11,14 +11,19 @@ import { PostDTO } from 'src/app/Models/post.dto';
   templateUrl: './posts-list.component.html',
   styleUrls: ['./posts-list.component.scss'],
 })
-export class PostsListComponent {
+export class PostsListComponent implements OnInit {
+  posts!: PostDTO[];
+
   constructor(
     private postService: PostService,
     private router: Router,
     private localStorageService: LocalStorageService,
     private sharedService: SharedService,
-  ) {}
-  posts!: PostDTO[];
+  ) {
+    this.loadPosts();
+  }
+
+  ngOnInit(): void {}
 
   private async loadPosts(): Promise<void> {
     let errorResponse: any;

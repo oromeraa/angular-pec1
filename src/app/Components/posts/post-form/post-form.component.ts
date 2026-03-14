@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryService } from 'src/app/Services/category.service';
+
 import { LocalStorageService } from 'src/app/Services/local-storage.service';
 import { PostService } from 'src/app/Services/post.service';
 import { SharedService } from 'src/app/Services/shared.service';
@@ -37,6 +38,7 @@ export class PostFormComponent implements OnInit {
   isUpdateMode: boolean;
   validRequest: boolean;
   postId: string | null;
+  categoriesList: CategoryDTO[];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -53,6 +55,7 @@ export class PostFormComponent implements OnInit {
     this.postId = '';
     this.isUpdateMode = false;
     this.validRequest = false;
+    this.categoriesList = [];
 
     this.title = new FormControl<string>('', {
       validators: [Validators.required, Validators.maxLength(55)],
@@ -70,7 +73,7 @@ export class PostFormComponent implements OnInit {
       },
     );
     this.categories = new FormControl<CategoryDTO[]>([], {
-      validators: [Validators.required],
+      validators: [],
       nonNullable: true,
     });
 
@@ -81,10 +84,21 @@ export class PostFormComponent implements OnInit {
       categories: this.categories,
     });
   }
-  // TODO 13
   async ngOnInit(): Promise<void> {
     let errorResponse: any;
     this.postId = this.activatedRoute.snapshot.paramMap.get('id');
+
+    // load categories
+    const userId = this.localStorageService.get('user_id');
+    if (userId) {
+      try {
+        this.categoriesList =
+          await this.categoryService.getCategoriesByUserId(userId);
+      } catch (error: any) {
+        errorResponse = error.error;
+        this.sharedService.errorLog(errorResponse);
+      }
+    }
 
     // update
     if (this.postId) {
@@ -113,10 +127,7 @@ export class PostFormComponent implements OnInit {
       if (userId) {
         this.post.userId = userId;
         try {
-          await this.postService.updatePost(
-            this.postId,
-            this.post,
-          );
+          await this.postService.updatePost(this.postId, this.post);
           responseOK = true;
         } catch (error: any) {
           errorResponse = error.error;
@@ -135,6 +146,11 @@ export class PostFormComponent implements OnInit {
       }
     }
     return responseOK;
+  }
+
+  // https://stackoverflow.com/questions/47477167/use-comparewith-function-from-angular-material-mat-select-component-with-linked
+  compareCategoriesSelection(c1: CategoryDTO, c2: CategoryDTO): boolean {
+    return c1 && c2 ? c1.categoryId === c2.categoryId : c1 === c2;
   }
 
   private async createPost(): Promise<boolean> {
@@ -182,6 +198,9 @@ export class PostFormComponent implements OnInit {
       0,
       new Date(publication_date),
     );
+    // no está en el constructor de PostDTO y por no cambiarlo... lo hago así
+    // pero vaya... lo suyo sería que estubiera desde el inicio
+    this.post.categories = categories;
 
     if (this.isUpdateMode) {
       this.validRequest = await this.editPost();
