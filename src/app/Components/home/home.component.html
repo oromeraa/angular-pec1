@@ -13,15 +13,14 @@
     align-items: center;
   "
 >
-  <div style="display: flex; flex-direction: row">
+  <div style="display: flex; flex-direction: row; gap: 10px">
     <p
       *ngFor="let category of post.categories"
       class="category-badge"
       [style.background-color]="category.css_color"
       style="
-        border-radius: 10px;
-        padding: 7px;
-        margin: 5px;
+        border-radius: 15px;
+        padding: 10px;
         text-align: center;
         color: white;
       "
@@ -39,7 +38,10 @@
   <p>Publication date: {{ post.publication_date | formatDate: 3 }}</p>
   <p>Published by: {{ post.userAlias }}</p>
 
-  <div *ngIf="showButtons" style="display: flex; flex-direction: row">
+  <div
+    *ngIf="showButtons"
+    style="display: flex; flex-direction: row; gap: 10px"
+  >
     <button (click)="like(post.postId)">Like</button>
     <button (click)="dislike(post.postId)">Dislike</button>
   </div>
