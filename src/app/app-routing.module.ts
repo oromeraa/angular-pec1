@@ -28,6 +28,10 @@ const routes: Routes = [
     component: HomeComponent,
   },
   {
+    path: 'dashboard',
+    component: HomeComponent,
+  },
+  {
     path: 'posts',
     component: PostsListComponent,
     canActivate: [AuthGuard],
