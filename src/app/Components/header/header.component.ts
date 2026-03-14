@@ -33,6 +33,10 @@ export class HeaderComponent implements OnInit {
     );
   }
 
+  dashboard(): void {
+    this.router.navigateByUrl('dashboard');
+  }
+
   home(): void {
     this.router.navigateByUrl('home');
   }
