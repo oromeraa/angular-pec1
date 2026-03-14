@@ -20,7 +20,7 @@ export class HomeComponent {
     private localStorageService: LocalStorageService,
     private sharedService: SharedService,
     private router: Router,
-    private headerMenusService: HeaderMenusService
+    private headerMenusService: HeaderMenusService,
   ) {
     this.showButtons = false;
     this.loadPosts();
@@ -32,11 +32,23 @@ export class HomeComponent {
         if (headerInfo) {
           this.showButtons = headerInfo.showAuthSection;
         }
-      }
+      },
     );
   }
   private async loadPosts(): Promise<void> {
-    // TODO 2
+    let errorResponse: any;
+    const userId = this.localStorageService.get('user_id');
+
+    if (userId) {
+      this.showButtons = true;
+    }
+
+    try {
+      this.posts = await this.postService.getPosts();
+    } catch (error: any) {
+      errorResponse = error.error;
+      this.sharedService.errorLog(errorResponse);
+    }
   }
 
   async like(postId: string): Promise<void> {

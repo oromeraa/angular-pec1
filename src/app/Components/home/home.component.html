@@ -1,1 +1,46 @@
-<!-- TODO 3 -->
+<h2>List All Posts</h2>
+
+<div
+  *ngFor="let post of posts"
+  class="card"
+  style="
+    border-radius: 8px;
+    margin: 20px;
+    padding: 10px;
+    box-shadow: 5px 5px 5px 5px rgba(128, 128, 128, 0.36);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  "
+>
+  <div style="display: flex; flex-direction: row">
+    <p
+      *ngFor="let category of post.categories"
+      class="category-badge"
+      [style.background-color]="category.css_color"
+      style="
+        border-radius: 10px;
+        padding: 7px;
+        margin: 5px;
+        text-align: center;
+        color: white;
+      "
+    >
+      {{ category.title }}
+    </p>
+  </div>
+
+  <h2>Title: {{ post.title }}</h2>
+  <h3>Description: {{ post.description }}</h3>
+
+  <p>Likes: {{ post.num_likes }}</p>
+  <p>Dislikes: {{ post.num_dislikes }}</p>
+
+  <p>Publication date: {{ post.publication_date | formatDate: 3 }}</p>
+  <p>Published by: {{ post.userAlias }}</p>
+
+  <div *ngIf="showButtons" style="display: flex; flex-direction: row">
+    <button (click)="like(post.postId)">Like</button>
+    <button (click)="dislike(post.postId)">Dislike</button>
+  </div>
+</div>
